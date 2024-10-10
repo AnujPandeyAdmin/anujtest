@@ -1,0 +1,140 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "LKP_MDTABLES",
+        "type": "Lookup",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "Select * FROM md_tables where \nintegration_name='IntProduct' and \nsource_table_name='ProductDescription'",
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None"
+          },
+          "firstRowOnly": false,
+          "datasetSettings": {
+            "annotations": [],
+            "linkedService": {
+              "name": "WH_TRANFORM_DATA",
+              "properties": {
+                "annotations": [],
+                "type": "DataWarehouse",
+                "typeProperties": {
+                  "endpoint": "2p6jmx2ukzpuxiz6drubxwyht4-glbtaxcvrnke7pbx7a5yi4avqi.datawarehouse.fabric.microsoft.com",
+                  "artifactId": "811e6d84-737d-4eeb-baa2-f1c0c6b010ec",
+                  "workspaceId": "5c30c332-8b55-4f54-bc37-f83b84701582"
+                }
+              }
+            },
+            "type": "DataWarehouseTable",
+            "schema": [],
+            "typeProperties": {}
+          }
+        }
+      },
+      {
+        "name": "CP_METADATATABLES",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "LKP_MDTABLES",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_TRANFORM_DATA",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "2p6jmx2ukzpuxiz6drubxwyht4-glbtaxcvrnke7pbx7a5yi4avqi.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "811e6d84-737d-4eeb-baa2-f1c0c6b010ec",
+                    "workspaceId": "5c30c332-8b55-4f54-bc37-f83b84701582"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": {
+                  "value": "@activity('LKP_MDTABLES').output.value[0].source_table_schema",
+                  "type": "Expression"
+                },
+                "table": {
+                  "value": "@activity('LKP_MDTABLES').output.value[0].source_table_name",
+                  "type": "Expression"
+                }
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_TRANFORM_DATA",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "2p6jmx2ukzpuxiz6drubxwyht4-glbtaxcvrnke7pbx7a5yi4avqi.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "811e6d84-737d-4eeb-baa2-f1c0c6b010ec",
+                    "workspaceId": "5c30c332-8b55-4f54-bc37-f83b84701582"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": {
+                  "value": "@activity('LKP_MDTABLES').output.value[0].target_table_schema",
+                  "type": "Expression"
+                },
+                "table": {
+                  "value": "@activity('LKP_MDTABLES').output.value[0].target_table_name",
+                  "type": "Expression"
+                }
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}
