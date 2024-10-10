@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "PP_APIWEATHER_DATA"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2707ae3e-4524-489f-b397-f0321c62c08e"
+  }
+}
