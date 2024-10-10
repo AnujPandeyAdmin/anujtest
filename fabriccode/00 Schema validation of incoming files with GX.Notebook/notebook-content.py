@@ -18,19 +18,15 @@
 # MARKDOWN ********************
 
 # # Schema-validation of incoming files with Great Expectations
-Created by Will Needham, [Learn Microsoft Fabric](https://youtube.com/@learnmicrosoftfabric) 
+# eated by Will Needham, [Learn Microsoft Fabric](https://youtube.com/@learnmicrosoftfabric) 
+# Goal: show you a simple way to setup Great Expectations to perform schema validation on incoming files.** 
+# ote: the approach shown in this notebook is what I would call 'GX Lite'. GX is a vast library with lots of different features, but it can be overwhelming for beginners. I have developed the approach below to strip out a lot of the complexity and make it as easy as possible to get started with GX. Once you get the basics, it would be worthwhile learning about getting up Data Sources, Expectation Suites, Checkpoints etc, as these unlock more of the GX advanced features, like Actions, Data Docs etc._
+#  the example, we are using CSV file formats, but GX can validate pretty much any file type that can be read into a pandas dataframe. See [here](https://docs.greatexpectations.io/docs/oss/guides/connecting_to_your_data/fluent/filesystem/connect_filesystem_source_data/) for more details. 
+#  Prerequisites
+# Download the [sample CSV from GitHub](https://drive.google.com/uc?id=1zO8ekHWx9U7mrbx_0Hoxxu6od7uxJqWw&export=download) and upload to a Lakehouse Files area. I saved the file to this location: '/lakehouse/default/Files/landing/hubspot/csv/customers-100.csv' so if you want to follow along without changing any of the code below, you will also need to create the same folder structure. Or update the first paramter cell in this notebook, pointing to where you saved the csv. 
+#  Define path to file to be validation 
+#  make use of a parameter cell in Fabric to be able to parameterize the notebook (i.e. so we can embed this validation notebook into a Fabric Data Pipeline)
 
-**Goal: show you a simple way to setup Great Expectations to perform schema validation on incoming files.** 
-
-_Note: the approach shown in this notebook is what I would call 'GX Lite'. GX is a vast library with lots of different features, but it can be overwhelming for beginners. I have developed the approach below to strip out a lot of the complexity and make it as easy as possible to get started with GX. Once you get the basics, it would be worthwhile learning about getting up Data Sources, Expectation Suites, Checkpoints etc, as these unlock more of the GX advanced features, like Actions, Data Docs etc._
-
-In the example, we are using CSV file formats, but GX can validate pretty much any file type that can be read into a pandas dataframe. See [here](https://docs.greatexpectations.io/docs/oss/guides/connecting_to_your_data/fluent/filesystem/connect_filesystem_source_data/) for more details. 
-
-## Prerequisites
-- Download the [sample CSV from GitHub](https://drive.google.com/uc?id=1zO8ekHWx9U7mrbx_0Hoxxu6od7uxJqWw&export=download) and upload to a Lakehouse Files area. I saved the file to this location: '/lakehouse/default/Files/landing/hubspot/csv/customers-100.csv' so if you want to follow along without changing any of the code below, you will also need to create the same folder structure. Or update the first paramter cell in this notebook, pointing to where you saved the csv. 
-
-## Define path to file to be validation 
-We make use of a parameter cell in Fabric to be able to parameterize the notebook (i.e. so we can embed this validation notebook into a Fabric Data Pipeline)
 
 # PARAMETERS CELL ********************
 
