@@ -1,0 +1,94 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "RestSource",
+            "requestMethod": "GET",
+            "paginationRules": {
+              "supportRFC5988": "true"
+            },
+            "httpRequestTimeout": "00:01:40",
+            "requestInterval": "00.00:00:00.010",
+            "datasetSettings": {
+              "type": "RestResource",
+              "typeProperties": {
+                "relativeUrl": {
+                  "value": "@concat('/data/2.5/weather?lat=',pipeline().parameters.latitude,'&lon=',pipeline().parameters.longitude,'&appid=',pipeline().parameters.api_key)",
+                  "type": "Expression"
+                }
+              },
+              "schema": [],
+              "externalReferences": {
+                "connection": "9abce718-0584-4ad2-acaf-fd4705f71f39"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "JsonSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings"
+            },
+            "formatSettings": {
+              "type": "JsonWriteSettings"
+            },
+            "datasetSettings": {
+              "type": "Json",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": {
+                    "value": "@concat(formatDateTime(utcNow(), 'yyyy'),'/',formatDateTime(utcnow(),'MM'),'/',formatDateTime(utcNow(), 'dd'),'/')",
+                    "type": "Expression"
+                  },
+                  "fileName": "CurrentWeather.json"
+                }
+              },
+              "schema": {},
+              "linkedService": {
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "eda09b36-5c7f-4a9a-8ccb-e828a5bf1994",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Files"
+                  },
+                  "annotations": []
+                },
+                "name": "LKH_RAWDATA"
+              },
+              "annotations": []
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CP_API_DATA",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "latitude": {
+        "type": "string",
+        "defaultValue": "37.09024"
+      },
+      "longitude": {
+        "type": "string",
+        "defaultValue": "-95.712891"
+      },
+      "api_key": {
+        "type": "string",
+        "defaultValue": "9be0a34983db99fc1c6c6e6534e9608a"
+      }
+    }
+  }
+}
