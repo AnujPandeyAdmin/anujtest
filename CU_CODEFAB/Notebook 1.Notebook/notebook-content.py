@@ -17,7 +17,7 @@
 
 # CELL ********************
 
-
+#AnujPandey
 
 df = spark.read.option("multiline", "true").json("Files/2024/10/10/CurrentWeather.json")
 # df now is a Spark DataFrame containing JSON data from "Files/2024/10/10/CurrentWeather.json".
